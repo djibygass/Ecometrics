@@ -18,9 +18,11 @@ def main():
     )
 
     col1, col2 = st.columns([1, 14])
-    add_vertical_space(3)
-    col3,col4,col5,col6=st.columns([8,8,8,8])
-    add_vertical_space(3)
+
+    add_vertical_space(1)
+    col3, col4, col5, col6 = st.columns([1, 1, 1, 1,])
+    # col3,col4,col5,col6=st.columns([8,8,8,8])
+    # add_vertical_space(3)
 
     with col1:
         st.image("logo.PNG", width=80)
@@ -56,13 +58,13 @@ def main():
     elif current_page == "blog":
         blog()
 
-    st.markdown('<p style="text-align:center">&copy; Ecometrics 2023</p>', unsafe_allow_html=True)
-
-
+    st.markdown(
+        '<p style="text-align:center">&copy; Ecometrics 2023</p>',
+        unsafe_allow_html=True)
 
 
 def accueil():
-     # Display the image and form side by side
+    # Display the image and form side by side
     col1, col2 = st.columns([2, 2])
     image = Image.open("photo1.png")
     with col1:
@@ -70,7 +72,9 @@ def accueil():
     with col2:
         st.title("Fill out the form")
         role = st.selectbox("Role", ["Employé", "Boss"])
-        secteur = st.selectbox("Secteur d'activité", ["Usine", "Pharmacie", "Bureaux"])
+        secteur = st.selectbox(
+            "Secteur d'activité", [
+                "Usine", "Pharmacie", "Bureaux"])
         entreprise = st.text_input("Nom de l'entreprise")
         surface = st.text_input("Surface")
         if st.button("Submit"):
@@ -78,14 +82,14 @@ def accueil():
             csv_string = f"{role},{secteur},{entreprise},{surface}"
 
             # Upload the CSV string to S3
-            BUCKET_NAME="pa-csv"
-            s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+            BUCKET_NAME = "pa-csv"
+            s3 = boto3.client(
+                's3',
+                aws_access_key_id=AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
             csv_buffer = io.BytesIO(csv_string.encode('utf-8'))
             s3.upload_fileobj(csv_buffer, BUCKET_NAME, 'form_data.csv')
             st.success("CSV file uploaded successfully")
-    
-
-   
 
 
 def a_propos():
